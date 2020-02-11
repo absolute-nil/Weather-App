@@ -33,36 +33,52 @@ hbs.registerPartials(PartialsPath);
 // });
 
 app.get("/", (req, res) => {
-  res.render('index',{
-      title: 'Weather',
-      name: 'Nikhil Sharma'
-  })
+  res.render("index", {
+    title: "Weather",
+    name: "Nikhil Sharma"
+  });
 });
 
 app.get("/about", (req, res) => {
-  res.render('about',{
-    title: 'About',
-    name: 'Nikhil Sharma'
+  res.render("about", {
+    title: "About",
+    name: "Nikhil Sharma"
   });
 });
 
 app.get("/help", (req, res) => {
-    res.render('help',{
-        helpText: 'i am here to help',
-        title: 'Help',
-        name: 'Nikhil Sharma'
-    });
+  res.render("help", {
+    helpText: "i am here to help",
+    title: "Help",
+    name: "Nikhil Sharma"
   });
+});
 
 app.get("/weather", (req, res) => {
   res.send({
-    forecast: 'it is snowing',
-    location: 'mmbai'
-  }
-  );
+    forecast: "it is snowing",
+    location: "mmbai"
+  });
+});
+
+app.get("/help/*", (req, res) => {
+  res.render("notfound", {
+    errorText: "Help Page Not Found",
+    title: "404",
+    name: "Nikhil Sharma"
+
+  });
+});
+
+app.get("/*", (req, res) => {
+  res.render("notfound", {
+    errorText: "Page Not Found",
+    title: "404",
+    name: "Nikhil Sharma"
+
+  });
 });
 
 app.listen(3000, () => {
   console.log("started listening on port 3000");
 });
-
