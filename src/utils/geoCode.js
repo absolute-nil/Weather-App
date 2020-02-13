@@ -7,7 +7,7 @@ module.exports = geoCode = (address,callback) =>{
     if (err) {
       callback("unable to reach mapbox",undefined);
     } else if (features.length === 0) {
-      callback("uable to find location. try some other name",undefined);
+      callback({error:"uable to find location. try some other name"},undefined);
     } else {
       callback(undefined,{
         location: features[0].place_name,
