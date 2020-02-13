@@ -4,6 +4,8 @@ const express = require("express");
 const path = require("path");
 const hbs = require("hbs");
 const app = express();
+const geoCode = require("./utils/geoCode");
+const forecast = require("./utils/forecast");
 
 const publicDirectoryPath = path.join(__dirname, "../public");
 const viewsPath = path.join(__dirname, "../templates/views");
@@ -55,9 +57,28 @@ app.get("/help", (req, res) => {
 });
 
 app.get("/weather", (req, res) => {
-  res.send({
-    forecast: "it is snowing",
-    location: "mmbai"
+  if (!req.query.address) {
+    return res.send({
+      error: "Please provide a address to look for"
+    });
+  }
+
+  geoCode(req.query.address, (err, { location, longitude, latitude }) => {
+    if (err) {
+      return res.send(err);
+    }
+    forecast(longitude, latitude, (err, forecastData) => {
+      if(err){
+        return res.send(err);
+      }
+      console.log(location);
+      console.log(forecastData);
+      res.send({
+        location,
+        forecastData,
+        address: req.query.address
+      });
+    });
   });
 });
 
@@ -66,7 +87,6 @@ app.get("/help/*", (req, res) => {
     errorText: "Help Page Not Found",
     title: "404",
     name: "Nikhil Sharma"
-
   });
 });
 
@@ -75,7 +95,6 @@ app.get("/*", (req, res) => {
     errorText: "Page Not Found",
     title: "404",
     name: "Nikhil Sharma"
-
   });
 });
 
